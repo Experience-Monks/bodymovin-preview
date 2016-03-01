@@ -1,0 +1,24 @@
+{
+  "name": "animation",
+  "version": "1.0.0",
+  "description": "Site for showing / sharing bodymovin animations",
+  "main": "index.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jam3/bodymovin-preview.git"
+  },
+  "keywords": [
+    "bodymovin",
+    "animation",
+    "preview"
+  ],
+  "author": "Nick Poisson <nick@jam3.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jam3/bodymovin-preview/issues"
+  },
+  "homepage": "https://github.com/Jam3/bodymovin-preview#readme"
+}
