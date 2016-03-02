@@ -1,0 +1,35 @@
+/*
+ * ====================================================================
+ * Global.less
+ * 	Used to set some global styles for your project that are used on
+ * 	ALL pages.
+ * ====================================================================
+ */
+
+ body, html {
+  font-family: Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 300;
+  background-color: #999999;
+}
+#anim {
+  width: 100%;
+  height: 100%;
+}
+#control {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1;
+}
+#control a {
+  display: inline-block;
+  background-color: black;
+  color: #ffffff;
+  padding: 10px;
+  text-decoration: none;
+  font-size: 10px;
+}

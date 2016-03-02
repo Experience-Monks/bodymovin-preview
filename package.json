@@ -1,24 +1,60 @@
 {
-  "name": "animation",
-  "version": "1.0.0",
-  "description": "Site for showing / sharing bodymovin animations",
-  "main": "index.php",
+  "name": "bodymovin-preview",
+  "version": "0.0.0",
+  "description": "A site for showing / sharing bodymovin animations",
+  "author": {
+    "name": "Jam3",
+    "email": "td@jam3.com",
+    "url": "https://github.com/Jam3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "install": "npm run start",
+    "start": "npm run copy && npm run style && npm run dev",
+    "copy": "node scripts/copy.js",
+    "style": "node scripts/style.js",
+    "dev": "node scripts/dev.js",
+    "release": "npm run release-style && npm run release-browserify && npm run release-copy && npm run release-gzip",
+    "release-style": "node scripts/style.js --env=production",
+    "release-browserify": "node scripts/release.js --env=production",
+    "release-copy": "node scripts/copy.js --env=production",
+    "release-gzip": "node scripts/gzip.js --env=production",
+    "lowercase": "node scripts/lowercase.js",
+    "lint": "xo index.js lib/**/*.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jam3/bodymovin-preview.git"
-  },
-  "keywords": [
-    "bodymovin",
-    "animation",
-    "preview"
-  ],
-  "author": "Nick Poisson <nick@jam3.com>",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Jam3/bodymovin-preview/issues"
+  "repository": "https://github.com/Jam3/bodymovin-preview",
+  "dependencies": {
+    "domready": "^1.0.8",
+    "gsap": "^1.18.2"
   },
-  "homepage": "https://github.com/Jam3/bodymovin-preview#readme"
+  "devDependencies": {
+    "budo": "^6.1.0",
+    "concat-stream": "^1.5.1",
+    "envify": "^3.4.0",
+    "garnish": "^4.1.1",
+    "glob": "^6.0.1",
+    "autoprefixer": "^6.2.3",
+    "node-sass": "^3.4.2",
+    "postcss": "^5.0.14",
+    "sass-glob-importer": "^1.0.1",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "pngquant-bin": "^3.0.0",
+    "uglify-js": "^2.6.1",
+    "brfs": "^1.2.0",
+    "browserify-shim": "^3.8.0",
+    "browserify": "^12.0.1",
+    "envify": "^3.4.0"
+  },
+  "browserify": {
+    "transform": [
+      "envify",
+      "browserify-shim",
+      "brfs"
+    ]
+  },
+  "browserify-shim": {
+
+  },
+  "browser": {}
 }

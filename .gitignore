@@ -1,1 +1,10 @@
+.DS_Store
+*.log
+
+bower_components
+node_modules
+
+raw-assets
+.tmp
+release
 /lib/credentials.php
