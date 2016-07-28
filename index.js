@@ -6,6 +6,7 @@ domready(function() {
   var animation = null;
   var frames = 1;
   var intervalwd = null;
+  var slideflag = true;
 
   function createAnim() {
     if (animation) animation.destroy();
@@ -14,23 +15,29 @@ domready(function() {
       animType: 'svg',
       loop: true,
       autoplay: false,
-      animationData: JSON.parse(JSON.stringify(animData))
+      animationData: animData
     });
 
     var progressbar = document.getElementById('progress');
     var progressframes = document.getElementById('progress-frames');
 
     progress.max = animation.totalFrames;
-    progress.addEventListener('mousedown', function(e){
+    progress.addEventListener('mousedown', function(e) {
+      slideflag = false;
       animation.pause();
     });
-    progress.addEventListener('input', function(e){
-      animation.goToAndStop(progress.valueAsNumber, true);
-      progressframes.innerHTML = progress.value;
+    progress.addEventListener('input', function(e) {
+        animation.goToAndStop(progress.valueAsNumber, true);
+        progressframes.innerHTML = progress.value;
+    });
+    progress.addEventListener('mouseup', function(e) {
+      slideflag = true;
     });
     animation.addEventListener('enterFrame', function(e) {
+      if (slideflag) {
         progress.value = animation.currentFrame.toFixed(0);
         progressframes.innerHTML = animation.currentFrame.toFixed(0);
+      }
     });
   }
 
