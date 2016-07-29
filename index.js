@@ -1,45 +1,48 @@
 'use strict';
-var domready = require('domready');
+import domready from 'domready';
+import anim from './animation.js';
+var Animation = new anim();
 
 domready(function() {
 
   var animation = null;
-  var frames = 1;
   var intervalwd = null;
-  var slideflag = true;
+  var slideFlag = true;
 
-  function createAnim() {
-    if (animation) animation.destroy();
-    animation = bodymovin.loadAnimation({
-      wrapper: document.getElementById('anim'),
-      animType: 'svg',
-      loop: true,
-      autoplay: false,
-      animationData: animData
-    });
+  var progressbar = document.getElementById('progress');
+  var progressframes = document.getElementById('progress-frames');
+  var stepBWDBtn = document.getElementById('step-bwd');
+  var stepFWDBtn = document.getElementById('step-fwd');
 
-    var progressbar = document.getElementById('progress');
-    var progressframes = document.getElementById('progress-frames');
-
-    progress.max = animation.totalFrames;
-    progress.addEventListener('mousedown', function(e) {
-      slideflag = false;
-      animation.pause();
-    });
-    progress.addEventListener('input', function(e) {
-        animation.goToAndStop(progress.valueAsNumber, true);
-        progressframes.innerHTML = progress.value;
-    });
-    progress.addEventListener('mouseup', function(e) {
-      slideflag = true;
-    });
-    animation.addEventListener('enterFrame', function(e) {
-      if (slideflag) {
-        progress.value = animation.currentFrame.toFixed(0);
-        progressframes.innerHTML = animation.currentFrame.toFixed(0);
-      }
+  function createAnimation() {
+    Animation.create();
+    progress.max = Animation.getTotalFrames();
+    Animation.onFrameChange(function(currentFrame) {
+      progress.value = currentFrame;
+      progressframes.innerHTML = currentFrame;
     });
   }
+  function stopInterval(button) {
+    var mouseEvents = [ 'mouseout', 'mouseup' ];
+    mouseEvents.map(ev => {
+      button.addEventListener(ev, function(e) {
+        e.preventDefault();
+        if (Animation.exists()) clearInterval(intervalwd);
+      });
+    })
+  }
+
+  progress.addEventListener('mousedown', function(e) {
+    Animation.setFrameChangeFlag(false);
+    Animation.pause();
+  });
+  progress.addEventListener('input', function(e) {
+      Animation.goToAndStop(progress.valueAsNumber, true);
+      progressframes.innerHTML = progress.value;
+  });
+  progress.addEventListener('mouseup', function(e) {
+    Animation.setFrameChangeFlag(true);
+  });
 
   document.body.addEventListener('drop',function(e) {
     e.preventDefault();
@@ -53,7 +56,7 @@ domready(function() {
       window.animData = JSON.parse(e.target.result);
       if (window.animData) {
         window.deep = false;
-        createAnim();
+        createAnimation();
       }
     }
     reader.readAsText(file);
@@ -68,7 +71,6 @@ domready(function() {
   });
   document.getElementById('share').addEventListener('click',function(e) {
     e.preventDefault();
-    animation.stop();
     if (!window.deep && window.animData) {
       document.getElementById('d').value = JSON.stringify(window.animData);
       document.getElementById('save').submit();
@@ -79,50 +81,46 @@ domready(function() {
     var version = prompt("Please enter the github hash for bodymovin:",document.getElementById('v').value || 'master');
     if (version) window.location.href = "?v="+version;
   });
-  if (window.animData) createAnim();
+  if (window.animData) Animation.create();
   document.getElementById('play-pause').addEventListener('click',function(e) {
-    console.log(animation);
     e.preventDefault();
-    if (animation) animation.isPaused ? animation.play() : animation.pause();
+    Animation.togglePlay()
   });
   document.getElementById('stop').addEventListener('click',function(e) {
     e.preventDefault();
-    if (animation) animation.stop();
+    Animation.stop();
   });
-  document.getElementById('speed').addEventListener('click',function(e) {
+  //FIX!!!!VVVV
+  document.getElementById('speed').addEventListener('change',function(e) {
     e.preventDefault();
-    if (animation) animation.setSpeed(parseInt(prompt("Please enter the github hash for bodymovin:", animation.playSpeed)));
+    Animation.setSpeed(document.getElementById('speed').valueAsNumber);
   });
-  document.getElementById('frames').addEventListener('click',function(e) {
+  document.getElementById('frames').addEventListener('change',function(e) {
     e.preventDefault();
-    if (animation) frames = parseInt(prompt("Please enter the github hash for bodymovin:", frames));
+    console.log('change');
+    Animation.setFrames(document.getElementById('frames').valueAsNumber);
   });
-  document.getElementById('step-fwd').addEventListener('mousedown',function(e) {
+  stepFWDBtn.addEventListener('mousedown',function(e) {
     e.preventDefault();
-    if (animation) {
-      animation.goToAndStop(((animation.currentFrame + frames) % animation.totalFrames), true);
-      intervalwd = setInterval(function() {animation.goToAndStop(((animation.currentFrame + frames) % animation.totalFrames), true)},110);
+    if (Animation.exists()) {
+      Animation.step(true, true);
+      intervalwd = setInterval(function() {Animation.step(true, true)},110);
     }
   });
-  document.getElementById('step-fwd').addEventListener('mouseup',function(e) {
+  stopInterval(stepFWDBtn);
+  stepBWDBtn.addEventListener('mousedown',function(e) {
     e.preventDefault();
-    if (animation) clearInterval(intervalwd);
+    if (Animation.exists()) {
+      Animation.step(false, true);
+      intervalwd = setInterval(function() {Animation.step(false, true)},110);
+    };
   });
-  document.getElementById('step-bwd').addEventListener('mousedown',function(e) {
-    e.preventDefault();
-    if (animation) {
-      animation.goToAndStop(((animation.currentFrame - frames) % animation.totalFrames), true);
-      intervalwd = setInterval(function() {animation.goToAndStop(((animation.currentFrame - frames) % animation.totalFrames), true)},110);
-    }
-  });
-  document.getElementById('step-bwd').addEventListener('mouseup',function(e) {
-    e.preventDefault();
-    if (animation) clearInterval(intervalwd);
-  });
+  stopInterval(stepBWDBtn);
   document.getElementById('browse').addEventListener('click',function(e) {
     e.preventDefault();
     document.getElementById('file-input').click();
   });
+
   document.getElementById('file-input').addEventListener('change',function(e) {
     e.preventDefault();
     var file = e.target.files[0];
@@ -134,10 +132,14 @@ domready(function() {
       window.animData = JSON.parse(e.target.result);
       if (window.animData) {
         window.deep = false;
-        createAnim();
+        createAnimation();
       }
     }
     reader.readAsText(file);
+  });
+  document.getElementById('remove').addEventListener('click',function(e) {
+    e.preventDefault();
+    Animation.destroy();
   });
 
 });
