@@ -8,8 +8,13 @@ var execFile = require('child_process').execFile;
 var pngquant = require('pngquant-bin');
 
 function copy(file) {
+
   if (file) {
-    copyFile(path.join(config.output,'assets/'),config.raw,file);
+    if (file.indexOf(path.basename(config.app))>-1) {
+      copyFile(path.join(config.output,''),config.app,file);
+    }else{
+      copyFile(path.join(config.output,'assets/'),config.raw,file);
+    }
   } else {
     glob(path.join(config.raw,'**/*.*'),function(err,files) {
       if (!err) {
@@ -18,15 +23,13 @@ function copy(file) {
         console.log(err);
       }
     });
-    if (config.NODE_ENV==='production') {
-      glob(path.join(config.app,'**/*.*'),function(err,files) {
-        if (!err) {
-          files.forEach(copyFile.bind(null,path.join(config.output),config.app));
-        } else {
-          console.log(err);
-        }
-      });
-    }
+    glob(path.join(config.app,'**/*.*'),function(err,files) {
+      if (!err) {
+        files.forEach(copyFile.bind(null,path.join(config.output),config.app));
+      } else {
+        console.log(err);
+      }
+    });
   }
 }
 
@@ -52,4 +55,3 @@ if (!module.parent) {
 } else {
   module.exports = copy;
 }
-

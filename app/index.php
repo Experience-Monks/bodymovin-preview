@@ -1,5 +1,4 @@
 <?php
-
 function generateHash($count) {
   $hash = '';
   $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -54,14 +53,68 @@ if (!isset($v)) $v = @$_GET['v']!='' ? $_GET['v'] : 'master';
   <?php if (isset($json)) echo '<script type="text/javascript">window.deep = true; window.animData='.$json.';</script>'; ?>
 </head>
   <body>
-  	<div id="anim"></div>
-  	<div id="control">
+  	<div class="control">
   		<form id="save" method="POST">
   			<input type="hidden" name="v" id="v" value="<?php echo $v; ?>" />
   			<input type="hidden" name="d" id="d" value="" />
+        <input type="file" id="file-input" style="display: none; opacity: 0;"/>
   		</form>
-  		<a href="#" id="version">VERSION</a>
-  		<a href="#" id="share">SHARE</a>
+      <div class="left-pane">
+      <div class="file-controls pane-section">
+        <button href="#" id="version">VERSION</button>
+        <button href="#" id="share">SHARE</button>
+        <button href="#" id="browse">BROWSE</button>
+        <button href="#" id="remove">REMOVE</button>
+      </div>
+      <div class="animation-controls pane-section">
+        <button href="#" id="play-pause" class="disable">
+          <span id="play-spn" class="">PLAY</span>
+          <span id="pause-spn" class="out-left">PAUSE</span>
+        </button>
+        <button href="#" id="stop" class="disable">STOP</button>
+        <div class="inpt-block">
+          <label for="reverse" class="inpt-span">Reverse</label>
+          <div class="inpt-box chk-inpt-box"><input type="checkbox" id="reverse" class="disable" name="reverse" /></div>
+        </div>
+        <div class="inpt-block">
+          <span class="inpt-span">Play Speed</span>
+          <input type="number" id="speed" class="inpt-box disable" name="speed" min="1" value="1"/>
+        </div>
+        <div class="inpt-block">
+          <span class="inpt-span">Step Frames</span>
+          <input type="number" id="frames" class="inpt-box disable" name="frames" min="1" value="1"/>
+        </div>
+        <button href="#" id="step-bwd"  class="disable">StepBWD</button>
+        <button href="#" id="step-fwd" class="disable">StepFWD</button>
+        <div class="progress-block">
+          <input type="range" id="progress-bar" class="progress-bar disable" value="0" min="0" step="1"/>
+          <div class="inpt-block">
+            <span class="inpt-span">Frame</span>
+            <input type="text" id="progress-frames" class="inpt-box long-inpt-box disable" name="progress-frames" min="0" value="0"/>
+          </div>
+          <div class="inpt-block">
+            <span class="inpt-span">Time</span>
+            <input type="text" id="progress-time" class="inpt-box long-inpt-box disable" name="progress-time" maxlength="10" min="0" value="0"/>
+          </div>
+        </div>
+      </div>
+      <div class="color-controls pane-section">
+        <div id="color"></div>
+        <div class="inpt-block">
+          <span class="inpt-span">Hexa</span>
+          <input type="text" id="color-hex" class="inpt-box long-inpt-box" value="1"/>
+        </div>
+        <div class="inpt-block">
+          <span class="inpt-span">RGB</span>
+          <input type="text" id="color-r" class="inpt-box" name="r-color" value="1"/>
+          <input type="text" id="color-g" class="inpt-box" name="g-color" value="1"/>
+          <input type="text" id="color-b" class="inpt-box" name="b-color" value="1"/>
+        </div>
+      </div>
+    </div>
+    <div id="anim-wrap" class="animation-wrapper">
+      <div id="anim" class="animation"></div>
+    </div>
   	</div>
   </body>
 </html>

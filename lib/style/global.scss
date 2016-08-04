@@ -6,6 +6,12 @@
  * ====================================================================
  */
 
+ html {
+   box-sizing: border-box;
+ }
+ *, *:before, *:after {
+   box-sizing: inherit;
+ }
  body, html {
   font-family: Helvetica, Arial, sans-serif;
   width: 100%;
@@ -15,27 +21,111 @@
   font-weight: 300;
   background-color: #999999;
 }
-#anim {
+.control {
+  height: 100%;
   width: 100%;
-  height: 90%;
-}
-#control {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  z-index: 1;
-}
-#control a {
-  background-color: black;
-  color: #ffffff;
-  padding: 10px;
-  text-decoration: none;
-  font-size: 10px;
-  &:focus {
-    outline: none;
+  display: flex;
+  flex-flow: row;
+  .animation-wrapper {
+    order: 2;
+    flex: 8 8 0;
+    .animation {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
-}
-.progress {
-  display: inline-block;
-  width: 25%;
+  .left-pane {
+    order: 1;
+    flex: 2 2 0;
+    display: flex;
+    flex-flow: column;
+    min-width: 200px;
+    overflow-y: scroll;
+    height: 100%;
+    border-right: 7px solid #ffffff;
+    background-color: #333333;
+    .pane-section {
+      justify-content: center;
+      display: flex;
+      flex-flow: row wrap;
+      border-top: 1px solid #ffffff;
+      border-bottom: 1px solid #ffffff;
+      padding: 4%;
+    }
+    .file-controls {
+      min-height: 90px;
+    }
+    .animation-controls {
+      display: flex;
+      flex-flow: row wrap;
+      min-height: 345px;
+    }
+    .color-controls {
+      min-height: 245px;
+    }
+    .inpt-block {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+      margin: 6%;
+      .inpt-span {
+        color: #ffffff;
+      }
+      .inpt-box {
+        border-radius: 4px;
+        border: 2px solid #ffffff;
+        width: 20%;
+      }
+      .long-inpt-box {
+        width: 50%;
+      }
+      .chk-inpt-box {
+        border: none;
+      }
+    }
+    .progress-block {
+      .progress-bar {
+        width: 100%;
+        margin: 10% 0;
+      }
+    }
+
+    button {
+      border-radius: 5px;
+      width: 45%;
+      margin: 2%;
+      background-color: #000000;
+      color: #ffffff;
+      padding: 4%;
+      text-decoration: none;
+      border: none;
+      position: relative;
+      transition: background-color 1s;
+      overflow: hidden;
+      &:focus {
+        outline: none;
+      }
+      &[disabled] {
+        background-color: #4e4e4e;
+      }
+      &:hover {
+        background-color: #CF4647;
+      }
+      span {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        opacity: 1;
+        transition: left .8s;
+        &.out-left {
+          left: -200%;
+        }
+        &.out-right {
+          left: 200%;
+        }
+      }
+    }
+  }
 }

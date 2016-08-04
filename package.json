@@ -26,7 +26,8 @@
   "dependencies": {
     "babelify": "^7.3.0",
     "domready": "^1.0.8",
-    "gsap": "^1.18.2"
+    "gsap": "^1.18.2",
+    "simple-color-picker": "^0.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^6.2.3",
@@ -49,7 +50,6 @@
   "browserify": {
     "transform": [
       "envify",
-
       "babelify"
     ]
   },
