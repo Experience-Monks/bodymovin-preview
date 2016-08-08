@@ -60,6 +60,11 @@ if (!isset($v)) $v = @$_GET['v']!='' ? $_GET['v'] : 'master';
         <input type="file" id="file-input" style="display: none; opacity: 0;"/>
   		</form>
       <div class="left-pane">
+      <div class="hamburger opened">
+        <div class="top"></div>
+        <div class="middle"></div>
+        <div class="bottom"></div>
+      </div>
       <div class="file-controls pane-section">
         <button href="#" id="version">VERSION</button>
         <button href="#" id="share">SHARE</button>
@@ -68,7 +73,7 @@ if (!isset($v)) $v = @$_GET['v']!='' ? $_GET['v'] : 'master';
       </div>
       <div class="animation-controls pane-section">
         <button href="#" id="play-pause" class="disable">
-          <span id="play-spn" class="">PLAY</span>
+          <span id="play-spn" class="disable">PLAY</span>
           <span id="pause-spn" class="out-left">PAUSE</span>
         </button>
         <button href="#" id="stop" class="disable">STOP</button>
@@ -106,9 +111,9 @@ if (!isset($v)) $v = @$_GET['v']!='' ? $_GET['v'] : 'master';
         </div>
         <div class="inpt-block">
           <span class="inpt-span">RGB</span>
-          <input type="text" id="color-r" class="inpt-box" name="r-color" value="1"/>
-          <input type="text" id="color-g" class="inpt-box" name="g-color" value="1"/>
-          <input type="text" id="color-b" class="inpt-box" name="b-color" value="1"/>
+          <input type="text" id="color-r" class="inpt-box" value="1"/>
+          <input type="text" id="color-g" class="inpt-box" value="1"/>
+          <input type="text" id="color-b" class="inpt-box" value="1"/>
         </div>
       </div>
     </div>

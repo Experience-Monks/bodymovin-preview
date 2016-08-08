@@ -11,24 +11,29 @@ domready(function() {
   if (window.animData) {createAnimation();}
 
   var intervalwd = null;
+  var frames = 1;
 
   var colorPicker = new ColorPicker({
-    color: '#498f8b',
+    color: '#B02F41',
     background: '#737373',
     el: document.getElementById('color'),
   });
 
+  var reverseCheck = document.getElementById('reverse');
+  var speedFld = document.getElementById('speed');
+  var framesFld = document.getElementById('frames');
+  var stepBWDBtn = document.getElementById('step-bwd');
+  var stepFWDBtn = document.getElementById('step-fwd');
   var progressbar = document.getElementById('progress-bar');
   var progressframes = document.getElementById('progress-frames');
   var progresstime = document.getElementById('progress-time');
-  var stepBWDBtn = document.getElementById('step-bwd');
-  var stepFWDBtn = document.getElementById('step-fwd');
-  var speedFld = document.getElementById('speed');
-  var framesFld = document.getElementById('frames');
   var hexColorFld = document.getElementById('color-hex');
   var rColorFld = document.getElementById('color-r');
   var gColorFld = document.getElementById('color-g');
   var bColorFld = document.getElementById('color-b');
+  var leftPane = document.getElementsByClassName('left-pane')[0];
+  var hamburgerBtn = document.getElementsByClassName('hamburger')[0];
+  var animWrap = document.getElementById('anim-wrap');
 
   //ANIMATION FUNCTIONSvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   function createAnimation() {
@@ -85,6 +90,10 @@ domready(function() {
     e.preventDefault();
     document.body.style.backgroundColor = colorPicker.getHexString();
   };
+  function simulateClick(target) {
+    var clickEvt = new MouseEvent('click', {'view': window,'bubbles': false,'cancelable': true});
+    target.dispatchEvent(clickEvt);
+  }
   //FILE MANAGING BUTTONS EVENTS FUNCTIONSvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   function versionBtnClick(e) {
     e.preventDefault();
@@ -100,11 +109,10 @@ domready(function() {
   };
   function browseBtnClick(e) {
     e.preventDefault();
-    document.getElementById('file-input').click();
+    simulateClick(document.getElementById('file-input'));
   };
   function fileInptChange(e) {
     e.preventDefault();
-    console.log('click');
     setAnimation(e, e.target.files[0]);
     e.target.value = "";
   };
@@ -146,17 +154,17 @@ domready(function() {
   };
   function framesFldInput(e) {
     e.preventDefault();
-    Animation.setFrames(framesFld.valueAsNumber ? framesFld.valueAsNumber : 1);
+    frames = framesFld.valueAsNumber ? framesFld.valueAsNumber : 1;
   };
   function stepBWDBtnMouseDown(e) {
     e.preventDefault();
-      Animation.step(false, true);
-      intervalwd = setInterval(function() {Animation.step(false, true)},110);
+    Animation.step(false, frames);
+    intervalwd = setInterval(function() {Animation.step(false, frames)},110);
   };
   function stepFWDBtnMouseDown(e) {
     e.preventDefault();
-      Animation.step(true, true);
-      intervalwd = setInterval(function() {Animation.step(true, true)},110);
+    Animation.step(true, frames);
+    intervalwd = setInterval(function() {Animation.step(true, frames)},110);
   };
   function stopIntervalStepBtns(stepBtn) {
     var mouseEvents = [ 'mouseout', 'mouseup' ];
@@ -197,10 +205,54 @@ domready(function() {
   };
   function reverseCheckChange(e) {
     Animation.setDirection(e.target.checked ? -1 : 1);
-  }
+  };
+  function hamburgerBtnClick(e) {
+    if (leftPane.hidden) {
+      Tween.to(leftPane, .7, {x: '0%', ease: Power1.easeIn});
+      Tween.to(animWrap, .7, {left: '20%',width: '80%' , ease: Power1.easeIn});
+      hamburgerBtn.className += ' opened';
+      leftPane.hidden = false;
+    }else {
+      Tween.to(leftPane, .7, {x: '-100%', ease: Power1.easeIn});
+      Tween.to(animWrap, .7, {left: 0,width: '100%' , ease: Power1.easeIn});
+      hamburgerBtn.className = hamburgerBtn.className.replace(/opened/,'');
+      leftPane.hidden = true;
+    }
+  };
+  function handleKeyDownEvent(e) {
+    var shiftFrames = e.shiftKey ? frames*5 : frames;
+    // console.log(e);
+    switch (e.which) {
+      case 32: //spacebar
+        e.preventDefault();
+        Animation.togglePlay();
+        break;
+      case 37: //left
+        e.preventDefault();
+        Animation.step(false, shiftFrames);
+        break;
+      case 39: //right
+        e.preventDefault();
+        simulateClick(reverseCheck);
+        Animation.step(true, shiftFrames);
+        break;
+      case 82: //shift + r
+        e.preventDefault();
+        if (e.shiftKey) {
+          simulateClick(reverseCheck);
+        }
+        break;
+      case 67: //shift + c
+        e.preventDefault();
+        if (e.shiftKey) {
+          simulateClick(hamburgerBtn);
+        }
+        break;
+    }
+  };
 
 
-
+  document.body.addEventListener('keydown', handleKeyDownEvent);
   document.body.addEventListener('drop', bodyDrop);
   document.body.addEventListener('dragover', bodyDragOver);
   document.body.addEventListener('dragout', bodyDragOut);
@@ -212,7 +264,7 @@ domready(function() {
   document.getElementById('remove').addEventListener('click', removeBtnClick);
   document.getElementById('play-pause').addEventListener('click', playPauseBtnClick);
   document.getElementById('stop').addEventListener('click', stopBtnClick);
-  document.getElementById('reverse').addEventListener('change', reverseCheckChange);
+  reverseCheck.addEventListener('change', reverseCheckChange);
   speedFld.addEventListener('input', speedFldInput);
   framesFld.addEventListener('input', framesFldInput);
   progressbar.addEventListener('mousedown', progressBarMouseDown);
@@ -227,4 +279,5 @@ domready(function() {
   rColorFld.addEventListener('change', rgbColorFldChange);
   gColorFld.addEventListener('change', rgbColorFldChange);
   bColorFld.addEventListener('change', rgbColorFldChange);
+  hamburgerBtn.addEventListener('click', hamburgerBtnClick);
 });

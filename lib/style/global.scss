@@ -25,26 +25,75 @@
   height: 100%;
   width: 100%;
   display: flex;
-  flex-flow: row;
+  position: relative;
   .animation-wrapper {
-    order: 2;
-    flex: 8 8 0;
+    position: absolute;
+    z-index: 1;
+    left: 20%;
+    width: 80%;
+    height: 100%;
+    display: flex;
     .animation {
-      position: relative;
-      top: 50%;
-      transform: translateY(-50%);
+      margin: auto;
+      flex: 1 100%;
     }
   }
   .left-pane {
-    order: 1;
-    flex: 2 2 0;
+    height: 100%;
+    width: 20%;
+    position: absolute;
+    z-index: 2;
     display: flex;
     flex-flow: column;
     min-width: 200px;
-    overflow-y: scroll;
-    height: 100%;
-    border-right: 7px solid #ffffff;
+    max-width: 255px;
+    overflow: visible;
+    box-shadow: 2px 0 2px #ffffff, 5px 0 15px #000000;
     background-color: #333333;
+    .hamburger {
+      position: absolute;
+      left: 105%;
+      top: 1%;
+      width: 25px;
+      height: 20px;
+      opacity: 0.3;
+      &:hover {
+        opacity: 1;
+      }
+      .top, .middle, .bottom {
+        position: absolute;
+        content: ' ';
+        height: 2px;
+        width: 100%;
+        background-color: #333;
+        box-shadow: 1px 0 4px #ffffff;
+        transition-property: top, transform, opacity;
+        transition-duration: 1s;
+      }
+      .top {
+        top: 0%;
+      }
+      .middle {
+        top: 50%;
+      }
+      .bottom {
+        top: 100%;
+      }
+      &.opened {
+        .top {
+          top: 50%;
+          transform: rotate(45deg);
+        }
+        .bottom {
+          top: 50%;
+          transform: rotate(-45deg);
+        }
+        .middle{
+          opacity: 0;
+        }
+      }
+
+    }
     .pane-section {
       justify-content: center;
       display: flex;
@@ -54,21 +103,18 @@
       padding: 4%;
     }
     .file-controls {
-      min-height: 90px;
     }
     .animation-controls {
       display: flex;
       flex-flow: row wrap;
-      min-height: 345px;
     }
     .color-controls {
-      min-height: 245px;
     }
     .inpt-block {
       display: flex;
       flex-flow: row;
       justify-content: space-between;
-      margin: 6%;
+      margin: 2%;
       .inpt-span {
         color: #ffffff;
       }
@@ -81,6 +127,7 @@
         width: 50%;
       }
       .chk-inpt-box {
+        align-self: flex-end;
         border: none;
       }
     }
@@ -108,6 +155,9 @@
       }
       &[disabled] {
         background-color: #4e4e4e;
+        &:hover {
+          background-color: #2a2a2a;
+        }
       }
       &:hover {
         background-color: #CF4647;
