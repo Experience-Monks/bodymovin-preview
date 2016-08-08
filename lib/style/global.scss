@@ -105,8 +105,6 @@
     .file-controls {
     }
     .animation-controls {
-      display: flex;
-      flex-flow: row wrap;
     }
     .color-controls {
     }
@@ -127,7 +125,6 @@
         width: 50%;
       }
       .chk-inpt-box {
-        align-self: flex-end;
         border: none;
       }
     }
