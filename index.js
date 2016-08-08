@@ -19,6 +19,7 @@ domready(function() {
     el: document.getElementById('color'),
   });
 
+  var control = document.getElementsByClassName('control')[0];
   var reverseCheck = document.getElementById('reverse');
   var speedFld = document.getElementById('speed');
   var framesFld = document.getElementById('frames');
@@ -207,16 +208,12 @@ domready(function() {
     Animation.setDirection(e.target.checked ? -1 : 1);
   };
   function hamburgerBtnClick(e) {
-    if (leftPane.hidden) {
-      Tween.to(leftPane, .7, {x: '0%', ease: Power1.easeIn});
-      Tween.to(animWrap, .7, {left: '20%',width: '80%' , ease: Power1.easeIn});
-      hamburgerBtn.className += ' opened';
-      leftPane.hidden = false;
+    if (control.hidden) {
+      control.className += ' opened';
+      control.hidden = false;
     }else {
-      Tween.to(leftPane, .7, {x: '-100%', ease: Power1.easeIn});
-      Tween.to(animWrap, .7, {left: 0,width: '100%' , ease: Power1.easeIn});
-      hamburgerBtn.className = hamburgerBtn.className.replace(/opened/,'');
-      leftPane.hidden = true;
+      control.className = control.className.replace(/opened/, '');
+      control.hidden = true;
     }
   };
   function handleKeyDownEvent(e) {
@@ -233,11 +230,9 @@ domready(function() {
         break;
       case 39: //right
         e.preventDefault();
-        simulateClick(reverseCheck);
         Animation.step(true, shiftFrames);
         break;
       case 82: //shift + r
-        e.preventDefault();
         if (e.shiftKey) {
           simulateClick(reverseCheck);
         }

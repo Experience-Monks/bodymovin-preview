@@ -53,17 +53,19 @@ if (!isset($v)) $v = @$_GET['v']!='' ? $_GET['v'] : 'master';
   <?php if (isset($json)) echo '<script type="text/javascript">window.deep = true; window.animData='.$json.';</script>'; ?>
 </head>
   <body>
-  	<div class="control">
+  	<div class="control opened">
   		<form id="save" method="POST">
   			<input type="hidden" name="v" id="v" value="<?php echo $v; ?>" />
   			<input type="hidden" name="d" id="d" value="" />
         <input type="file" id="file-input" style="display: none; opacity: 0;"/>
   		</form>
       <div class="left-pane">
-      <div class="hamburger opened">
-        <div class="top"></div>
-        <div class="middle"></div>
-        <div class="bottom"></div>
+        <div class="hamburger-wrap">
+          <div class="hamburger">
+            <div class="top"></div>
+            <div class="middle"></div>
+            <div class="bottom"></div>
+          </div>
       </div>
       <div class="file-controls pane-section">
         <button href="#" id="version">VERSION</button>

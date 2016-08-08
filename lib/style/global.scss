@@ -25,14 +25,33 @@
   height: 100%;
   width: 100%;
   display: flex;
-  position: relative;
+  &.opened {
+    .animation-wrapper {
+      transform: translateX(0%) translateY(0%) scale(1);
+    }
+    .left-pane {
+      transform: translateX(0);
+      .hamburger {
+        .top {
+          top: 50%;
+          transform: rotate(45deg);
+        }
+        .bottom {
+          top: 50%;
+          transform: rotate(-45deg);
+        }
+        .middle{
+          opacity: 0;
+        }
+      }
+    }
+  }
   .animation-wrapper {
-    position: absolute;
+    flex: 1 80%;
     z-index: 1;
-    left: 20%;
-    width: 80%;
-    height: 100%;
     display: flex;
+    transform: translateX(-10%) translateY(10%) scale(1.2);
+    transition: 0.7s ease;
     .animation {
       margin: auto;
       flex: 1 100%;
@@ -40,8 +59,8 @@
   }
   .left-pane {
     height: 100%;
-    width: 20%;
-    position: absolute;
+    flex: 1 20%;
+    transform: translateX(-100%);
     z-index: 2;
     display: flex;
     flex-flow: column;
@@ -50,6 +69,7 @@
     overflow: visible;
     box-shadow: 2px 0 2px #ffffff, 5px 0 15px #000000;
     background-color: #333333;
+    transition: 0.7s transform ease;
     .hamburger {
       position: absolute;
       left: 105%;
@@ -78,19 +98,6 @@
       }
       .bottom {
         top: 100%;
-      }
-      &.opened {
-        .top {
-          top: 50%;
-          transform: rotate(45deg);
-        }
-        .bottom {
-          top: 50%;
-          transform: rotate(-45deg);
-        }
-        .middle{
-          opacity: 0;
-        }
       }
 
     }
@@ -159,7 +166,7 @@
       &:hover {
         background-color: #CF4647;
       }
-      span {
+      span { //play button
         position: absolute;
         left: 50%;
         top: 50%;
