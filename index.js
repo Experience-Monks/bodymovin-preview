@@ -1,12 +1,11 @@
-'use strict';
 import domready from 'domready';
 import ColorPicker from 'simple-color-picker';
 import Tween from 'gsap';
 import anim from './animation.js';
+import production from './scripts/envdetect.js';
 var Animation = new anim();
 
 domready(function() {
-
   disableButtons();
   if (window.animData) {createAnimation();}
 
@@ -112,17 +111,53 @@ domready(function() {
     e.preventDefault();
     simulateClick(document.getElementById('file-input'));
   };
+
+  function addImagesBtnClick(e) {
+    e.preventDefault();
+    simulateClick(document.getElementById('add-image'));
+  };
+
   function fileInptChange(e) {
     e.preventDefault();
     setAnimation(e, e.target.files[0]);
     e.target.value = "";
   };
+
+  function uploadFile(e) {
+    e.preventDefault();
+    var files = $(this).get(0).files;
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      formData.append('uploads[]', file, file.name);
+    }
+    var url = production ? "upload.php" : "http://localhost:3000/upload";
+    $.ajax({
+      url: url,
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(data){
+          alert(data);
+      }
+  });
+};
+
   function removeBtnClick(e) {
     e.preventDefault();
     Animation.destroy();
     disableButtons();
     window.animData = null;
+    var url = production ? "upload.php?action=remove" : "http://localhost:3000/remove";
+    $.ajax({
+      url: url,
+      type: 'GET',
+      processData: false,
+      contentType: false
+    });
   };
+
   //ANIMATION CONTROL BUTTONS EVENTS FUNCTIONSvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   function disableButtons() {
     let disable = document.getElementsByClassName('disable');
@@ -255,7 +290,9 @@ domready(function() {
   document.getElementById('version').addEventListener('click', versionBtnClick);
   document.getElementById('share').addEventListener('click', shareBtnClick);
   document.getElementById('browse').addEventListener('click',browseBtnClick);
+  document.getElementById('add_images').addEventListener('click',addImagesBtnClick);
   document.getElementById('file-input').addEventListener('change', fileInptChange);
+  document.getElementById('add-image').addEventListener('change', uploadFile);
   document.getElementById('remove').addEventListener('click', removeBtnClick);
   document.getElementById('play-pause').addEventListener('click', playPauseBtnClick);
   document.getElementById('stop').addEventListener('click', stopBtnClick);
