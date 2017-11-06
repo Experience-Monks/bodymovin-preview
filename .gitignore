@@ -8,3 +8,4 @@ raw-assets
 .tmp
 release
 /lib/credentials.php
+images/*
